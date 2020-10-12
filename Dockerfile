@@ -19,7 +19,7 @@ RUN apk update \
 
 ARG JETTY_VERSION=9.4.26.v20200117
 ARG JETTY_HOME=/opt/jetty
-ARG JETTY_BASE=/opt/gluu/jetty
+ARG JETTY_BASE=/opt/jans/jetty
 ARG JETTY_USER_HOME_LIB=/home/jetty/lib
 
 # Install jetty
@@ -40,7 +40,7 @@ ENV JANS_VERSION=4.2.2-SNAPSHOT
 ENV JANS_BUILD_DATE="2020-09-28 18:21"
 
 # Install FIDO2
-RUN wget -q https://ox.gluu.org/maven/org/gluu/fido2-server/${JANS_VERSION}/fido2-server-${JANS_VERSION}.war -O /tmp/fido2.war \
+RUN wget -q https://maven.jans.io/maven/io/jans/jans-fido2-server/${JANS_VERSION}/jans-fido2-server-${JANS_VERSION}.war -O /tmp/fido2.war \
     && mkdir -p ${JETTY_BASE}/fido2/webapps/fido2 \
     && unzip -qq /tmp/fido2.war -d ${JETTY_BASE}/fido2/webapps/fido2 \
     && java -jar ${JETTY_HOME}/start.jar jetty.home=${JETTY_HOME} jetty.base=${JETTY_BASE}/fido2 --add-to-start=server,deploy,resources,http,http-forwarded,threadpool,jsp \
@@ -54,7 +54,7 @@ RUN apk add --no-cache py3-cryptography
 COPY requirements.txt /app/requirements.txt
 RUN pip3 install -U pip wheel \
     && pip3 install --no-cache-dir -r /app/requirements.txt \
-    && rm -rf /src/pygluu-containerlib/.git
+    && rm -rf /src/jans-pycloudlib/.git
 
 # =======
 # Cleanup
@@ -85,7 +85,7 @@ ENV JANS_CONFIG_ADAPTER=consul \
     JANS_CONFIG_CONSUL_KEY_FILE=/etc/certs/consul_client.key \
     JANS_CONFIG_CONSUL_TOKEN_FILE=/etc/certs/consul_token \
     JANS_CONFIG_KUBERNETES_NAMESPACE=default \
-    JANS_CONFIG_KUBERNETES_CONFIGMAP=gluu \
+    JANS_CONFIG_KUBERNETES_CONFIGMAP=janssen \
     JANS_CONFIG_KUBERNETES_USE_KUBE_CONFIG=false
 
 # ==========
@@ -103,7 +103,7 @@ ENV JANS_SECRET_ADAPTER=vault \
     JANS_SECRET_VAULT_KEY_FILE=/etc/certs/vault_client.key \
     JANS_SECRET_VAULT_CACERT_FILE=/etc/certs/vault_ca.crt \
     JANS_SECRET_KUBERNETES_NAMESPACE=default \
-    JANS_SECRET_KUBERNETES_SECRET=gluu \
+    JANS_SECRET_KUBERNETES_SECRET=janssen \
     JANS_SECRET_KUBERNETES_USE_KUBE_CONFIG=false
 
 # ===============
@@ -116,7 +116,7 @@ ENV JANS_PERSISTENCE_TYPE=ldap \
     JANS_COUCHBASE_URL=localhost \
     JANS_COUCHBASE_USER=admin \
     JANS_COUCHBASE_CERT_FILE=/etc/certs/couchbase.crt \
-    JANS_COUCHBASE_PASSWORD_FILE=/etc/gluu/conf/couchbase_password \
+    JANS_COUCHBASE_PASSWORD_FILE=/etc/jans/conf/couchbase_password \
     JANS_COUCHBASE_CONN_TIMEOUT=10000 \
     JANS_COUCHBASE_CONN_MAX_WAIT=20000 \
     JANS_COUCHBASE_SCAN_CONSISTENCY=not_bounded
@@ -136,23 +136,23 @@ ENV JANS_MAX_RAM_PERCENTAGE=75.0 \
 # ==========
 
 LABEL name="FIDO2" \
-    maintainer="Gluu Inc. <support@gluu.org>" \
-    vendor="Gluu Federation" \
-    version="4.2.2" \
+    maintainer="Janssen io <support@jans.io>" \
+    vendor="Janssen Project" \
+    version="5.0.0" \
     release="dev" \
-    summary="Gluu FIDO2" \
+    summary="Janssen FIDO2" \
     description="FIDO2 server"
 
 RUN mkdir -p /etc/certs /deploy \
-    /etc/gluu/conf \
+    /etc/jans/conf \
     /app/templates
 
 COPY jetty/*.xml ${JETTY_BASE}/fido2/webapps/
 COPY conf/*.tmpl /app/templates/
-COPY conf/fido2 /etc/gluu/conf/fido2
-RUN mkdir -p /etc/gluu/conf/fido2/mds/cert \
-    /etc/gluu/conf/fido2/mds/toc \
-    /etc/gluu/conf/fido2/server_metadata
+COPY conf/fido2 /etc/jans/conf/fido2
+RUN mkdir -p /etc/jans/conf/fido2/mds/cert \
+    /etc/jans/conf/fido2/mds/toc \
+    /etc/jans/conf/fido2/server_metadata
 
 COPY scripts /app/scripts
 RUN chmod +x /app/scripts/entrypoint.sh

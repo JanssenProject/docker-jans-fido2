@@ -1,5 +1,5 @@
 JANS_VERSION=4.2.2
-IMAGE_NAME=gluufederation/fido2
+IMAGE_NAME=janssenproject/fido2
 UNSTABLE_VERSION=dev
 
 build-dev:
