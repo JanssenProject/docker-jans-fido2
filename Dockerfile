@@ -36,12 +36,12 @@ EXPOSE 8080
 # FIDO2
 # =====
 
-ENV JANS_VERSION=5.0.0-SNAPSHOT
-ENV JANS_BUILD_DATE="2020-10-16 18:12"
-ENV JANS_SOURCE_URL=https://maven.jans.io/maven/io/jans/jans-fido2-server/${JANS_VERSION}/jans-fido2-server-${JANS_VERSION}.war
+ENV CLOUD_NATIVE_VERSION=5.0.0-SNAPSHOT
+ENV CLOUD_NATIVE_BUILD_DATE="2020-10-16 18:12"
+ENV CLOUD_NATIVE_SOURCE_URL=https://maven.jans.io/maven/io/jans/jans-fido2-server/${CLOUD_NATIVE_VERSION}/jans-fido2-server-${CLOUD_NATIVE_VERSION}.war
 
 # Install FIDO2
-RUN wget -q ${JANS_SOURCE_URL} -O /tmp/fido2.war \
+RUN wget -q ${CLOUD_NATIVE_SOURCE_URL} -O /tmp/fido2.war \
     && mkdir -p ${JETTY_BASE}/fido2/webapps/fido2 \
     && unzip -qq /tmp/fido2.war -d ${JETTY_BASE}/fido2/webapps/fido2 \
     && java -jar ${JETTY_HOME}/start.jar jetty.home=${JETTY_HOME} jetty.base=${JETTY_BASE}/fido2 --add-to-start=server,deploy,resources,http,http-forwarded,threadpool,jsp \
@@ -75,65 +75,65 @@ COPY LICENSE /licenses/
 # Config ENV
 # ==========
 
-ENV JANS_CONFIG_ADAPTER=consul \
-    JANS_CONFIG_CONSUL_HOST=localhost \
-    JANS_CONFIG_CONSUL_PORT=8500 \
-    JANS_CONFIG_CONSUL_CONSISTENCY=stale \
-    JANS_CONFIG_CONSUL_SCHEME=http \
-    JANS_CONFIG_CONSUL_VERIFY=false \
-    JANS_CONFIG_CONSUL_CACERT_FILE=/etc/certs/consul_ca.crt \
-    JANS_CONFIG_CONSUL_CERT_FILE=/etc/certs/consul_client.crt \
-    JANS_CONFIG_CONSUL_KEY_FILE=/etc/certs/consul_client.key \
-    JANS_CONFIG_CONSUL_TOKEN_FILE=/etc/certs/consul_token \
-    JANS_CONFIG_CONSUL_NAMESPACE=jans \
-    JANS_CONFIG_KUBERNETES_NAMESPACE=default \
-    JANS_CONFIG_KUBERNETES_CONFIGMAP=jans \
-    JANS_CONFIG_KUBERNETES_USE_KUBE_CONFIG=false
+ENV CLOUD_NATIVE_CONFIG_ADAPTER=consul \
+    CLOUD_NATIVE_CONFIG_CONSUL_HOST=localhost \
+    CLOUD_NATIVE_CONFIG_CONSUL_PORT=8500 \
+    CLOUD_NATIVE_CONFIG_CONSUL_CONSISTENCY=stale \
+    CLOUD_NATIVE_CONFIG_CONSUL_SCHEME=http \
+    CLOUD_NATIVE_CONFIG_CONSUL_VERIFY=false \
+    CLOUD_NATIVE_CONFIG_CONSUL_CACERT_FILE=/etc/certs/consul_ca.crt \
+    CLOUD_NATIVE_CONFIG_CONSUL_CERT_FILE=/etc/certs/consul_client.crt \
+    CLOUD_NATIVE_CONFIG_CONSUL_KEY_FILE=/etc/certs/consul_client.key \
+    CLOUD_NATIVE_CONFIG_CONSUL_TOKEN_FILE=/etc/certs/consul_token \
+    CLOUD_NATIVE_CONFIG_CONSUL_NAMESPACE=jans \
+    CLOUD_NATIVE_CONFIG_KUBERNETES_NAMESPACE=default \
+    CLOUD_NATIVE_CONFIG_KUBERNETES_CONFIGMAP=jans \
+    CLOUD_NATIVE_CONFIG_KUBERNETES_USE_KUBE_CONFIG=false
 
 # ==========
 # Secret ENV
 # ==========
 
-ENV JANS_SECRET_ADAPTER=vault \
-    JANS_SECRET_VAULT_SCHEME=http \
-    JANS_SECRET_VAULT_HOST=localhost \
-    JANS_SECRET_VAULT_PORT=8200 \
-    JANS_SECRET_VAULT_VERIFY=false \
-    JANS_SECRET_VAULT_ROLE_ID_FILE=/etc/certs/vault_role_id \
-    JANS_SECRET_VAULT_SECRET_ID_FILE=/etc/certs/vault_secret_id \
-    JANS_SECRET_VAULT_CERT_FILE=/etc/certs/vault_client.crt \
-    JANS_SECRET_VAULT_KEY_FILE=/etc/certs/vault_client.key \
-    JANS_SECRET_VAULT_CACERT_FILE=/etc/certs/vault_ca.crt \
-    JANS_SECRET_VAULT_NAMESPACE=jans \
-    JANS_SECRET_KUBERNETES_NAMESPACE=default \
-    JANS_SECRET_KUBERNETES_SECRET=jans \
-    JANS_SECRET_KUBERNETES_USE_KUBE_CONFIG=false
+ENV CLOUD_NATIVE_SECRET_ADAPTER=vault \
+    CLOUD_NATIVE_SECRET_VAULT_SCHEME=http \
+    CLOUD_NATIVE_SECRET_VAULT_HOST=localhost \
+    CLOUD_NATIVE_SECRET_VAULT_PORT=8200 \
+    CLOUD_NATIVE_SECRET_VAULT_VERIFY=false \
+    CLOUD_NATIVE_SECRET_VAULT_ROLE_ID_FILE=/etc/certs/vault_role_id \
+    CLOUD_NATIVE_SECRET_VAULT_SECRET_ID_FILE=/etc/certs/vault_secret_id \
+    CLOUD_NATIVE_SECRET_VAULT_CERT_FILE=/etc/certs/vault_client.crt \
+    CLOUD_NATIVE_SECRET_VAULT_KEY_FILE=/etc/certs/vault_client.key \
+    CLOUD_NATIVE_SECRET_VAULT_CACERT_FILE=/etc/certs/vault_ca.crt \
+    CLOUD_NATIVE_SECRET_VAULT_NAMESPACE=jans \
+    CLOUD_NATIVE_SECRET_KUBERNETES_NAMESPACE=default \
+    CLOUD_NATIVE_SECRET_KUBERNETES_SECRET=jans \
+    CLOUD_NATIVE_SECRET_KUBERNETES_USE_KUBE_CONFIG=false
 
 # ===============
 # Persistence ENV
 # ===============
 
-ENV JANS_PERSISTENCE_TYPE=ldap \
-    JANS_PERSISTENCE_LDAP_MAPPING=default \
-    JANS_LDAP_URL=localhost:1636 \
-    JANS_COUCHBASE_URL=localhost \
-    JANS_COUCHBASE_USER=admin \
-    JANS_COUCHBASE_CERT_FILE=/etc/certs/couchbase.crt \
-    JANS_COUCHBASE_PASSWORD_FILE=/etc/jans/conf/couchbase_password \
-    JANS_COUCHBASE_CONN_TIMEOUT=10000 \
-    JANS_COUCHBASE_CONN_MAX_WAIT=20000 \
-    JANS_COUCHBASE_SCAN_CONSISTENCY=not_bounded
+ENV CLOUD_NATIVE_PERSISTENCE_TYPE=ldap \
+    CLOUD_NATIVE_PERSISTENCE_LDAP_MAPPING=default \
+    CLOUD_NATIVE_LDAP_URL=localhost:1636 \
+    CLOUD_NATIVE_COUCHBASE_URL=localhost \
+    CLOUD_NATIVE_COUCHBASE_USER=admin \
+    CLOUD_NATIVE_COUCHBASE_CERT_FILE=/etc/certs/couchbase.crt \
+    CLOUD_NATIVE_COUCHBASE_PASSWORD_FILE=/etc/jans/conf/couchbase_password \
+    CLOUD_NATIVE_COUCHBASE_CONN_TIMEOUT=10000 \
+    CLOUD_NATIVE_COUCHBASE_CONN_MAX_WAIT=20000 \
+    CLOUD_NATIVE_COUCHBASE_SCAN_CONSISTENCY=not_bounded
 
 # ===========
 # Generic ENV
 # ===========
 
-ENV JANS_MAX_RAM_PERCENTAGE=75.0 \
-    JANS_WAIT_MAX_TIME=300 \
-    JANS_WAIT_SLEEP_DURATION=10 \
-    JANS_JAVA_OPTIONS="" \
-    JANS_SSL_CERT_FROM_SECRETS=false \
-    JANS_NAMESPACE=jans
+ENV CLOUD_NATIVE_MAX_RAM_PERCENTAGE=75.0 \
+    CLOUD_NATIVE_WAIT_MAX_TIME=300 \
+    CLOUD_NATIVE_WAIT_SLEEP_DURATION=10 \
+    CLOUD_NATIVE_JAVA_OPTIONS="" \
+    CLOUD_NATIVE_SSL_CERT_FROM_SECRETS=false \
+    CLOUD_NATIVE_NAMESPACE=jans
 
 # ==========
 # misc stuff
