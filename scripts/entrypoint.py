@@ -59,7 +59,7 @@ def modify_webdefault_xml():
 
 
 def main():
-    persistence_type = os.environ.get("CLOUD_NATIVE_PERSISTENCE_TYPE", "ldap")
+    persistence_type = os.environ.get("CN_PERSISTENCE_TYPE", "ldap")
 
     render_salt(manager, "/app/templates/salt.tmpl", "/etc/jans/conf/salt")
     render_jans_properties("/app/templates/jans.properties.tmpl", "/etc/jans/conf/jans.properties")
@@ -84,7 +84,7 @@ def main():
         render_hybrid_properties("/etc/jans/conf/jans-hybrid.properties")
 
     if not os.path.isfile("/etc/certs/jans_https.crt"):
-        if as_boolean(os.environ.get("CLOUD_NATIVE_SSL_CERT_FROM_SECRETS", False)):
+        if as_boolean(os.environ.get("CN_SSL_CERT_FROM_SECRETS", False)):
             manager.secret.to_file("ssl_cert", "/etc/certs/jans_https.crt")
         else:
             get_server_certificate(manager.config.get("hostname"), 443, "/etc/certs/jans_https.crt")
