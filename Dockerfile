@@ -37,14 +37,14 @@ EXPOSE 8080
 # =====
 
 ENV CN_VERSION=5.0.0-SNAPSHOT
-ENV CN_BUILD_DATE="2020-10-20 09:02"
+ENV CN_BUILD_DATE="2020-10-22 17:38"
 ENV CN_SOURCE_URL=https://maven.jans.io/maven/io/jans/jans-fido2-server/${CN_VERSION}/jans-fido2-server-${CN_VERSION}.war
 
 # Install FIDO2
 RUN wget -q ${CN_SOURCE_URL} -O /tmp/fido2.war \
-    && mkdir -p ${JETTY_BASE}/fido2/webapps/fido2 \
-    && unzip -qq /tmp/fido2.war -d ${JETTY_BASE}/fido2/webapps/fido2 \
-    && java -jar ${JETTY_HOME}/start.jar jetty.home=${JETTY_HOME} jetty.base=${JETTY_BASE}/fido2 --add-to-start=server,deploy,resources,http,http-forwarded,threadpool,jsp \
+    && mkdir -p ${JETTY_BASE}/jans-fido2/webapps/jans-fido2 \
+    && unzip -qq /tmp/fido2.war -d ${JETTY_BASE}/jans-fido2/webapps/jans-fido2 \
+    && java -jar ${JETTY_HOME}/start.jar jetty.home=${JETTY_HOME} jetty.base=${JETTY_BASE}/jans-fido2 --add-to-start=server,deploy,resources,http,http-forwarded,threadpool,jsp \
     && rm -f /tmp/fido2.war
 
 # ======
@@ -151,7 +151,7 @@ RUN mkdir -p /etc/certs /deploy \
     /etc/jans/conf \
     /app/templates
 
-COPY jetty/*.xml ${JETTY_BASE}/fido2/webapps/
+COPY jetty/*.xml ${JETTY_BASE}/jans-fido2/webapps/
 COPY conf/*.tmpl /app/templates/
 COPY conf/fido2 /etc/jans/conf/fido2
 RUN mkdir -p /etc/jans/conf/fido2/mds/cert \
